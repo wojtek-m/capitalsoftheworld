@@ -13,6 +13,23 @@ Route::get('/', array(
 
 /*
 |------------------------
+| Pages
+|------------------------
+*/
+
+Route::get('/about', array(
+    'as' => 'about',
+    'uses' => 'HomeController@about'
+));
+
+Route::get('/feedback', array(
+    'as' => 'feedback',
+    'uses' => 'HomeController@feedback'
+));
+
+
+/*
+|------------------------
 | User profiles
 |------------------------
 */
@@ -34,6 +51,12 @@ Route::get('countries/{continent}', array(
         'uses' => 'CountriesController@continent'
 ));
 
+Route::get('/country/{country}', array(
+        'as' => 'country',
+        'uses' => 'CountriesController@country'
+));
+
+
 
 /*
 |------------------------
@@ -41,20 +64,21 @@ Route::get('countries/{continent}', array(
 |------------------------
 */
 
-Route::get('/quizz', array(
+Route::get('/quiz', array(
         'as' => 'quizz',
-        'uses' => 'QuizzController@getQuizz'
+        'uses' => 'QuizController@getQuiz'
 ));
 
-Route::post('/quizz', array(
+Route::post('/quiz', array(
         'as' => 'quizz-post',
-        'uses' => 'QuizzController@postQuizz'
+        'uses' => 'QuizController@postQuiz'
 ));
 
-Route::get('/quizz/new', array(
+Route::get('/quiz/new/{number_of_questions}', array(
         'as' => 'quizz-new',
-        'uses' => 'QuizzController@generateQuizz'
+        'uses' => 'QuizController@generateQuiz'
 ));
+
 
 /*
 |------------------------
@@ -90,6 +114,14 @@ Route::group(array('before' => 'guest'), function() {
         Route::post('/account/forgot-password', array(
             'as' => 'account-forgot-password-post',
             'uses' => 'AccountController@postForgotPassword'
+        ));
+
+        /*
+        | Send feedback (POST)
+        */
+        Route::post('/feedback', array(
+            'as' => 'feedback-post', 
+            'uses' => 'HomeController@postFeedback'
         ));
 
 
@@ -172,6 +204,14 @@ Route::group(array('before' => 'auth'), function() {
     Route::get('/account/sign-out', array(
         'as' => 'account-sign-out',
         'uses' => 'AccountController@getSignOut'
+    ));
+
+    /*
+    | Quiz History (GET)
+    */
+    Route::get('/account/quizz-history', array(
+        'as' => 'quizz-history',
+        'uses' => 'QuizController@getQuizzHistory'
     ));
 
 });

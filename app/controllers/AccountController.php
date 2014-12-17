@@ -10,7 +10,7 @@ class AccountController extends BaseController {
     */
 
     public function getSignIn() {
-        return View::make('account.signin');
+        return View::make('account.signin')->with('title', 'Sign in |');
     }
 
     public function postSignIn() {
@@ -25,7 +25,8 @@ class AccountController extends BaseController {
             // Redirect to the sign in page
             return Redirect::route('account-sign-in')
                 ->withErrors($validator)
-                ->withInput();
+                ->withInput()
+                ->with('title', 'Sign in |');
         }
         else {
             $remember = (Input::has('remember')) ? true : false;
@@ -39,16 +40,22 @@ class AccountController extends BaseController {
 
             if($auth) {
                 // Redirect to the intended page
-                return Redirect::intended('/');
+                return Redirect::intended('/')
+                    ->with('global', 'You are now signed-in.')
+                    ->with('alert-type', 'alert-success'); 
             }
             else {
                 return Redirect::route('account-sign-in')
-                    ->with('global', 'There was a problem signing you in. Email and password do not match or your account is not active.');
+                    ->with('global', 'There was a problem signing you in. Email and password do not match or your account is not active.')
+                    ->with('alert-type', 'alert-danger')
+                    ->with('title', 'Sign in |');
             }
         }
 
         return Redirect::route('account-sign-in')
-            ->with('global', 'There was a problem signing you in. Have you activated your account?');
+            ->with('global', 'There was a problem signing you in. Have you activated your account?')
+            ->with('alert-type', 'alert-danger')
+            ->with('title', 'Sign in |');
     }
 
     /*
@@ -60,7 +67,8 @@ class AccountController extends BaseController {
     public function getSignOut() {
         Auth::logout();
         return Redirect::route('home')
-            ->with('global', 'You have signed out.');
+            ->with('global', 'You have signed out.')
+            ->with('alert-type', 'alert-info');
     }
 
     /*
@@ -70,7 +78,7 @@ class AccountController extends BaseController {
     */
 
     public function getCreate() {
-        return View::make('account.create');
+        return View::make('account.create')->with('title', 'Register |');
     }
 
     public function postCreate() {
@@ -116,7 +124,9 @@ class AccountController extends BaseController {
 
                 // Redirect to home
                 return Redirect::route('home')
-                    ->with('global', 'Your account has been created. Please check your e-mail for the activation link.');
+                    ->with('global', 'Your account has been created. Please check your e-mail for the activation link.')
+                    ->with('alert-type', 'alert-success')
+                    ->with('title', 'Registration Successful |');
             }
             // FAILURE
             else {
@@ -146,12 +156,15 @@ class AccountController extends BaseController {
 
             if($user->save()) {
                 return Redirect::route('home')
-                    ->with('global', 'Your account has been activated! You can now sign in.');
+                    ->with('global', 'Your account has been activated! You can now sign in.')
+                    ->with('alert-type', 'alert-success')
+                    ->with('title', 'Account Activated | ');
             }
         }
         
         return Redirect::route('home')
-                ->with('global', 'We cound not activate your account. Please try again later.');
+                ->with('global', 'We cound not activate your account. Please try again later.')
+                ->with('alert-type', 'alert-warning');
 
     }
 
@@ -163,7 +176,7 @@ class AccountController extends BaseController {
 
     // Change user password (GET)
     public function getChangePassword() {
-        return View::make('account.password');
+        return View::make('account.password')->with('title', 'Change Password | ');
     }
 
     // Change user password (POST)
@@ -178,7 +191,8 @@ class AccountController extends BaseController {
 
         if ($validator->fails()) {
             return Redirect::route('account-change-password')
-                ->withErrors($validator);
+                ->withErrors($validator)
+                ->with('title', 'Change Password | ');
         } else {
 
             $user = User::find(Auth::user()->id);
@@ -191,17 +205,21 @@ class AccountController extends BaseController {
 
                 if ($user->save()) {
                     return Redirect::route('home')
-                        ->with('global', 'Your password has been changed.');
+                        ->with('global', 'Your password has been changed.')
+                        ->with('alert-type', 'alert-success')
+                        ->with('title', 'Your Password has been Changed | ');
                 }
             }
         }
 
         return Redirect::route('account-change-password')
-            ->with('global', 'Your password could not be changed.');
+            ->with('global', 'Your password could not be changed.')
+            ->with('alert-type', 'alert-success')
+            ->with('title', 'Change Password | ');
     }
 
     public function getForgotPassword() {
-        return View::make('account.forgot');
+        return View::make('account.forgot')->with('title', 'Forgot Password | ');
     }
 
     public function getRecover($code) {
@@ -218,13 +236,17 @@ class AccountController extends BaseController {
             // Reset successs
             if($user->save()) {
                 return Redirect::route('home')
-                    ->with('global', 'Your account has been recovered, you can sign in with your temporary password. Please change it as soon as you are signed in.');
+                    ->with('global', 'Your account has been recovered, you can sign in with your temporary password. Please change it as soon as you are signed in.')
+                    ->with('alert-type', 'alert-success')
+                    ->with('title', 'Account Recovered | ');
             }
         }
 
         // Fallback redirect
         return Redirect::route('home')
-            ->with('global', 'Could not recover your account.');
+            ->with('global', 'Could not recover your account.')
+            ->with('alert-type', 'alert-danger')
+            ->with('title', 'Account Recovery Failed | ');
     }
 
     public function postForgotPassword() {
@@ -258,12 +280,16 @@ class AccountController extends BaseController {
                     });
 
                     return Redirect::route('home')
-                        ->with('global', 'We have sent you a temporary password by e-mail');
+                        ->with('global', 'We have sent you a temporary password by e-mail')
+                        ->with('alert-type', 'alert-success')
+                        ->with('title', 'Please Check Your e-mail | ');;
                 }
             }
         }
 
         return Redirect::route('account-forgot-password')
-            ->with('global', 'Could not request new password.');
+            ->with('global', 'Could not request new password.')
+            ->with('alert-type', 'alert-danger')
+            ->with('title', 'New Password Request Failed | ');
     }
 }

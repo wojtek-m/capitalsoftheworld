@@ -1,73 +1,91 @@
 @extends('layout.main')
 
 @section('content')
-    <h1>Capitals of the World Quizz</h1>
 
-    <h3>Quizz using QuizzController@getQuizz</h3>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="well bs-component offset1 padding-75">
+                <h5>Capitals of the World Quizz</h5>
 
-    <h2>What is the capital of {{{ $questions_idx[$q_index][0] }}}?</h2>
-      <form action="{{ URL::route('quizz-post') }}" method="post">
-        
-        <!-- QUESTION 1 -->
-        <input type="radio" name="question" value="@if ($randomizer == 1) {{{ $questions_idx[$q_index][1] }}} 
-                                                      @else {{ $all_capitals[$randomizer_250[1]] }} 
-                                                      @endif">
-        <strong>
-                @if ($randomizer == 1) 
-                        {{ $questions_idx[$q_index][1]  }}
-                @else 
-                        {{ $all_capitals[$randomizer_250[1]]  }}
-                @endif
-        </strong><br>
-        
-        <!-- QUESTION 2 -->
-        <input type="radio" name="question" value="@if ($randomizer == 2) {{{ $questions_idx[$q_index][1] }}}
-                                                        @else {{ $all_capitals[$randomizer_250[2]]  }} 
-                                                        @endif">
-        <strong>
-                @if ($randomizer == 2) 
-                        {{ $questions_idx[$q_index][1]  }}
-                @else 
-                        {{ $all_capitals[$randomizer_250[2]]  }} 
-                @endif
-        </strong><br>
-        
-        <!-- QUESTION 3 -->
-        <input type="radio" name="question" value="@if ($randomizer == 3) {{{ $questions_idx[$q_index][1] }}}
-                                                        @else {{ $all_capitals[$randomizer_250[3]]  }} 
-                                                        @endif">
-        <strong>
-                @if ($randomizer == 3) 
-                        {{ $questions_idx[$q_index][1]  }}
-                @else 
-                        {{ $all_capitals[$randomizer_250[3]]  }}
-                @endif
-        </strong><br>
+                <h4>Question number {{ $q_index + 1 }} / {{ $number_of_questions }}</h4><br>
+                 <form action="{{ URL::route('quizz-post') }}" method="post">
+                    <fieldset>
+                        <legend><h3>What is the capital of {{ $questions_idx[$q_index][0] }}?</h3></legend>
+                        
+                        <!-- QUESTION 1 -->
+                        <label class="radio">
+                            <input type="radio" name="question" value="@if ($randomizer == 1) {{{ $questions_idx[$q_index][1] }}} 
+                                                                          @else {{ $all_capitals[$randomizer_250[1]] }} 
+                                                                          @endif">
+                            <h4>
+                                    @if ($randomizer == 1) 
+                                            {{ $questions_idx[$q_index][1]  }}
+                                    @else 
+                                            {{ $all_capitals[$randomizer_250[1]]  }}
+                                    @endif
+                            </h4>
+                        </label>
+                        
+                        <!-- QUESTION 2 -->
+                        <label class="radio">
+                            <input type="radio" name="question" value="@if ($randomizer == 2) {{{ $questions_idx[$q_index][1] }}}
+                                                                            @else {{ $all_capitals[$randomizer_250[2]]  }} 
+                                                                            @endif">
+                            <h4>
+                                    @if ($randomizer == 2) 
+                                            {{ $questions_idx[$q_index][1]  }}
+                                    @else 
+                                            {{ $all_capitals[$randomizer_250[2]]  }} 
+                                    @endif
+                            </h4>
+                        </label>
+                        
+                        <!-- QUESTION 3 -->
+                        <label class="radio">
+                            <input type="radio" name="question" value="@if ($randomizer == 3) {{{ $questions_idx[$q_index][1] }}}
+                                                                            @else {{ $all_capitals[$randomizer_250[3]]  }} 
+                                                                            @endif">
+                            <h4>
+                                    @if ($randomizer == 3) 
+                                            {{ $questions_idx[$q_index][1]  }}
+                                    @else 
+                                            {{ $all_capitals[$randomizer_250[3]]  }}
+                                    @endif
+                            </h4>
+                        </label>
 
-                <!-- QUESTION 4 -->
-        <input type="radio" name="question" value="@if ($randomizer == 4) {{{ $questions_idx[$q_index][1] }}}
-                                                        @else {{ $all_capitals[$randomizer_250[4]]  }} 
-                                                        @endif">
-        <strong>
-                @if ($randomizer == 4) 
-                        {{ $questions_idx[$q_index][1]  }}
-                @else 
-                        {{ $all_capitals[$randomizer_250[4]]  }}
-                @endif
-        </strong><br>
+                        <!-- QUESTION 4 -->
+                        <label class="radio">
+                            <input type="radio" name="question" value="@if ($randomizer == 4) {{{ $questions_idx[$q_index][1] }}}
+                                                                            @else {{ $all_capitals[$randomizer_250[4]]  }} 
+                                                                            @endif">
+                            <h4>
+                                    @if ($randomizer == 4) 
+                                            {{ $questions_idx[$q_index][1]  }}
+                                    @else 
+                                            {{ $all_capitals[$randomizer_250[4]]  }}
+                                    @endif
+                            </h4>
+                        </label>
 
-        <!-- QUESTION 5 -->
-        <input type="radio" name="question" value="@if ($randomizer == 5) {{{ $questions_idx[$q_index][1] }}}
-                                                        @else {{ $all_capitals[$randomizer_250[5]]  }} 
-                                                        @endif">
-        <strong>
-                @if ($randomizer == 5) 
-                        {{ $questions_idx[$q_index][1]  }}
-                @else 
-                        {{ $all_capitals[$randomizer_250[5]]  }}
-                @endif
-        </strong><br>
-        
-        <input type="submit" value="Submit answer">
-    </form>
+                        <!-- QUESTION 5 -->
+                        <label class="radio">
+                            <input type="radio" name="question" value="@if ($randomizer == 5) {{{ $questions_idx[$q_index][1] }}}
+                                                                            @else {{ $all_capitals[$randomizer_250[5]]  }} 
+                                                                            @endif">
+                            <h4>
+                                    @if ($randomizer == 5) 
+                                            {{ $questions_idx[$q_index][1]  }}
+                                    @else 
+                                            {{ $all_capitals[$randomizer_250[5]]  }}
+                                    @endif
+                            </h4>
+                        </label>
+                        
+                        <button class="btn btn-info" type="submit">Submit answer</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
 @stop

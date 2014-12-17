@@ -1,0 +1,87 @@
+http://dbpedia.org/sparql
+***************************
+
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+
+select ?country ?currencyname ?abstract
+
+  where { 
+?country <http://purl.org/dc/terms/subject> <http://dbpedia.org/resource/Category:Member_states_of_the_United_Nations>; 
+<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Country> .
+?country foaf:name ?name  .
+
+OPTIONAL {
+?country dbpedia-owl:currency ?currency .
+?currency foaf:name ?currencyname  .
+}
+OPTIONAL {
+
+?country dbpedia-owl:abstract ?abstract .
+filter langMatches( lang(?abstract), "en" )
+}
+
+} order by ?country
+
+
+----
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+
+select ?country ?currencyname ?language ?gdpPerCapita ?gdpPppPerCapitaRank ?hdiRank ?hdiYear ?comment ?homepage ?flag ?flag-small
+
+where { 
+?country <http://purl.org/dc/terms/subject> <http://dbpedia.org/resource/Category:Member_states_of_the_United_Nations>; 
+<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Country> .
+?country foaf:name ?name  .
+
+OPTIONAL {
+?country dbpedia-owl:language ?language  .
+}
+
+OPTIONAL {
+?country dbpedia-owl:foundingDate ?foundingDate  .
+}
+
+OPTIONAL {
+?country foaf:depiction ?flag  .
+}
+
+OPTIONAL {
+?country dbpedia-owl:thumbnail ?flag-small  .
+}
+
+OPTIONAL {
+?country dbpprop:hdiYear ?hdiYear
+}
+
+OPTIONAL {
+?country dbpprop:hdiRank ?hdiRank
+}
+
+OPTIONAL {
+?country dbpprop:gdpPppPerCapita ?gdpPerCapita
+}
+
+OPTIONAL {
+?country dbpprop:gdpPppPerCapitaRank ?gdpPppPerCapitaRank
+}
+
+OPTIONAL {
+?country foaf:isPrimaryTopicOf ?homepage  .
+}
+
+OPTIONAL {
+?country dbpedia-owl:currency ?currency .
+?currency foaf:name ?currencyname  .
+}
+
+OPTIONAL {
+?country dbpedia-owl:abstract ?abstract .
+filter langMatches( lang(?abstract), "en" )
+}
+
+OPTIONAL {
+?country rdfs:comment ?comment .
+filter langMatches( lang(?comment), "en" )
+}
+
+} order by ?country
