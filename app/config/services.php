@@ -15,8 +15,8 @@ return array(
 	*/
 
 	'mailgun' => array(
-		'domain' => '',
-		'secret' => '',
+		'domain' => 'capitalsoftheworld.eu',
+		'secret' => 'key-a39ff3d6578cf996f102eab08d76c9cd',
 	),
 
 	'mandrill' => array(

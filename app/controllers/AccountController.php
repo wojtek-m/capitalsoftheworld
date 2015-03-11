@@ -130,7 +130,10 @@ class AccountController extends BaseController {
             }
             // FAILURE
             else {
-
+                return Redirect::route('home')
+                    ->with('global', 'We could not create your account, please try again or contact us using the feedback form.')
+                    ->with('alert-type', 'alert-warning')
+                    ->with('title', 'Registration Failed |');
             }
 
 
@@ -288,7 +291,7 @@ class AccountController extends BaseController {
         }
 
         return Redirect::route('account-forgot-password')
-            ->with('global', 'Could not request new password.')
+            ->with('global', 'Could not request a new password. Please make sure you use a correct e-mail address.')
             ->with('alert-type', 'alert-danger')
             ->with('title', 'New Password Request Failed | ');
     }

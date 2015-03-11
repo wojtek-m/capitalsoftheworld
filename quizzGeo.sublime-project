@@ -4,6 +4,14 @@
 		{
 			"follow_symlinks": true,
 			"path": "."
+		},
+		{
+			"follow_symlinks": true,
+			"path": "D:\\Temp\\fz3-14189466011910"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "D:\\Web Development\\esogeology"
 		}
 	]
 }

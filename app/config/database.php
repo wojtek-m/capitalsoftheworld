@@ -54,8 +54,8 @@ return array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => '178.62.91.18',
-			'database'  => 'quizz',
+			'host'      => 'localhost',
+			'database'  => 'quiz',
 			'username'  => 'root',
 			'password'  => '567oprah78bb',
 			'charset'   => 'utf8',

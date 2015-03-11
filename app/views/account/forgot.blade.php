@@ -3,7 +3,7 @@
 @section('content')
         <div class="row">
             <div class="col-lg-6">
-                <div class="well bs-component padding-50">
+                <div class="form well bs-component padding-50">
                     <form class="form-horizontal" action="" method="post">
                         <fieldset>
 
@@ -12,7 +12,7 @@
                             <div class="control-group">
                                 <label class="col-lg-2 control-label" for="inputEmail">Your email:</label>
                                 <div class="col-lg-10">
-                                    <input class="form-control" type="text" name="email" id="inputEmail" {{ (Input::old('email')) ? ' value="' . e(Input::old('email')) . '"' : '' }}>
+                                    <input class="form-control" type="text" name="email" placeholder="Your e-mail" id="inputEmail" {{ (Input::old('email')) ? ' value="' . e(Input::old('email')) . '"' : '' }}>
                                     @if($errors->has('email'))
                                         {{ $errors->first('email') }}
                                     @endif

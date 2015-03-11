@@ -43,7 +43,8 @@ class QuizController extends BaseController {
                 ->with('title', 'Quizz Size Error | '); 
         } 
 
-        $random_list = range(1,250);
+        // Random number list to generate a list of questions
+        $random_list = range(1,249);
         shuffle($random_list);
 
         $all_capitals_temp = Country::where('id', '>=', 0)->select('capital')->get();
@@ -55,7 +56,8 @@ class QuizController extends BaseController {
         $questions_temp = array();
         $q_index = 0;
 
-        $randomizer_250 = range(1,250);
+        // Random number list to use on the display page (for generating wrong answers in every question)
+        $randomizer_250 = range(1,248);
         shuffle($randomizer_250);
 
         // Put all capitals in the database in an array
@@ -114,127 +116,14 @@ class QuizController extends BaseController {
 
     public function postQuiz() {
 
-        // Check if the answer was posted.
-        if(isset($_POST['question'])) {
-            $questions_idx = Session::get('questions_idx');
-            $q_index = Session::get('q_index');
-            $number_of_questions = Session::get('number_of_questions');
-            
-            if ($q_index > $number_of_questions - 1) {
-                $q_index = $number_of_questions - 1;
-            }
+        $validator = Validator::make(Input::all(), 
+            array(
+                'question' => 'required'
+            )
+        );
 
-            $question = $questions_idx[$q_index][1];
-            $capital = $questions_idx[$q_index][0];
-            $answer = trim($_POST['question']);
-
-        }
-
-        $answered_questions = Session::get('answered_questions');
-        $correct_answers = Session::get('correct_answers');
-        $number_of_questions = Session::get('number_of_questions');
-        $feedback = '';
-
-        // Update the index and questions, if the answer is correct update the correct answers.
-        if ( $question == $answer) {
-            $q_index += 1;
-            $answered_questions += 1;
-            $correct_answers += 1;
-            $feedback = 'correct';
-        } else {
-            $q_index += 1;
-            $answered_questions += 1;
-            $feedback = 'incorrect';
-        }
-
-        // Keep the wrong answers random
-        $randomizer_250 = range(1,249);
-        shuffle($randomizer_250);
-
-        // Push the updated data to SESSION.
-        Session::put('answered_questions', $answered_questions );
-        Session::put('correct_answers', $correct_answers);
-        Session::put('q_index', $q_index);
-        Session::put('feedback', $feedback);
-        Session::put('randomizer_250', $randomizer_250);
-        Session::put('randomizer', rand(1,5));
-
-        // Return a view with the feedback and next question button
-
-        // if question index > than number of questions
-        if ($q_index >= sizeof(Session::get('questions_idx'))) {
-                
-                // Quiz is now inactive
-                Session::put('quizz_active', 0);
-                $q_index = sizeof(Session::get('questions_idx')) - 1;
-
-                // If user logged in - save quiz results
-                if(Auth::check()) {
-                    $id = Auth::user()->getId();
-                    $correct_answers = Session::get('correct_answers');
-                    $num_questions = Session::get('number_of_questions');
-                    $score = ($correct_answers / $num_questions) * 100;
-                    $quiz_type = Session::get('number_of_questions');
-
-                    // Save quiz record in the database
-                    $quiz_record = History::create(array(
-                        'userid'            => $id,
-                        'correct_answers'   => $correct_answers,
-                        'num_questions'     => $num_questions,
-                        'quiz_type'         => $quiz_type,
-                        'score'             => $score
-                    ));
-                }
-
-                // Display quiz finish summary
-                return View::make('quizz.quizz-finished', array(
-                                            'questions' => Session::get('questions'),
-                                            'questions_idx' => Session::get('questions_idx'),
-                                            'number_of_questions' => Session::get('number_of_questions'),
-                                            'q_index' => Session::get('q_index'),
-                                            'feedback' => Session::get('feedback'),
-                                            'answered_questions' => Session::get('answered_questions'),
-                                            'correct_answers' => Session::get('correct_answers')
-                                            )); 
-
-        // if quiz is still active, display the feedback page with next question button
-        } else { 
-
-                // generate Flickr photographs for the feedback page
-                $flickering = App::make('flickering');
-                $flickering->handshake('ade52786b574ca2ddbf8b58a0ce7299b', '25654303463a1f1e');
-                $search_query = $question . " " . $capital;
-
-                $results = Flickering::callMethod('photos.search', array(
-                                                                        'text' => $search_query,
-                                                                        'tags' => $capital, 
-                                                                        'extras' => 'url_m',
-                                                                        'orientation' => 'landscape', 
-                                                                        'sort' => 'relevance'
-                                                                        ));
-                $photos = $results->getResults('photo');
-                $photo_size = sizeof($photos);
-
-                $question_idx = Session::get('questions_idx');
-                $q_index = Session::get('q_index');
-                $current_country = $question_idx[$q_index - 1][0];
-                $country = Country::where('countryName', '=', $current_country)->get();
-
-                // in case there is less than 10 photographs returned from Flickr
-                if ($photo_size > 10) {
-                    $photo_index = 10;
-                } else {
-                    $photo_index = $photo_size;
-                }
-
-                // put data in the session
-                Session::put('photos', $photos);
-                Session::put('photo_index', $photo_index);
-                Session::put('country', $country);
-
-                // render view         
-                return View::make('quizz.quizz-feedback', array(
-                                            'country' => Session::get('country'),
+        if($validator->fails()) {
+            return View::make('quizz.quizz', array(
                                             'questions' => Session::get('questions'),
                                             'questions_idx' => Session::get('questions_idx'),
                                             'number_of_questions' => Session::get('number_of_questions'),
@@ -242,13 +131,146 @@ class QuizController extends BaseController {
                                             'all_capitals' => Session::get('all_capitals'), 
                                             'randomizer' => Session::get('randomizer'),
                                             'randomizer_250' => Session::get('randomizer_250'),
-                                            'q_index' => Session::get('q_index'),
-                                            'feedback' => Session::get('feedback'),
-                                            'photos' => Session::get('photos'),
-                                            'photo_index' => Session::get('photo_index'),
-                                            'title' => Session::get('number_of_questions') . ' Questions Quizz | '
-                                            )); 
-       
+                                            'q_index' => Session::get('q_index')
+                                                ))->withErrors($validator);
+        } else {
+
+            // Check if the answer was posted.
+            if(isset($_POST['question'])) {
+                $questions_idx = Session::get('questions_idx');
+                $q_index = Session::get('q_index');
+                $number_of_questions = Session::get('number_of_questions');
+                
+                if ($q_index > $number_of_questions - 1) {
+                    $q_index = $number_of_questions - 1;
+                }
+
+                $question = $questions_idx[$q_index][1];
+                $capital = $questions_idx[$q_index][0];
+                $answer = trim($_POST['question']);
+
+            }
+
+            $answered_questions = Session::get('answered_questions');
+            $correct_answers = Session::get('correct_answers');
+            $number_of_questions = Session::get('number_of_questions');
+            $feedback = '';
+
+            // Update the index and questions, if the answer is correct update the correct answers.
+            if ( $question == $answer) {
+                $q_index += 1;
+                $answered_questions += 1;
+                $correct_answers += 1;
+                $feedback = 'correct';
+            } else {
+                $q_index += 1;
+                $answered_questions += 1;
+                $feedback = 'incorrect';
+            }
+
+            // Keep the wrong answers random
+            $randomizer_250 = range(1,249);
+            shuffle($randomizer_250);
+
+            // Push the updated data to SESSION.
+            Session::put('answered_questions', $answered_questions );
+            Session::put('correct_answers', $correct_answers);
+            Session::put('q_index', $q_index);
+            Session::put('feedback', $feedback);
+            Session::put('randomizer_250', $randomizer_250);
+            Session::put('randomizer', rand(1,5));
+
+            // Return a view with the feedback and next question button
+
+            // if question index > than number of questions
+            if ($q_index >= sizeof(Session::get('questions_idx'))) {
+                    
+                    // Quiz is now inactive
+                    Session::put('quizz_active', 0);
+                    $q_index = sizeof(Session::get('questions_idx')) - 1;
+
+                    // If user logged in - save quiz results
+                    if(Auth::check()) {
+                        $id = Auth::user()->getId();
+                        $correct_answers = Session::get('correct_answers');
+                        $num_questions = Session::get('number_of_questions');
+                        $score = ($correct_answers / $num_questions) * 100;
+                        $quiz_type = Session::get('number_of_questions');
+
+                        // Save quiz record in the database
+                        $quiz_record = History::create(array(
+                            'userid'            => $id,
+                            'correct_answers'   => $correct_answers,
+                            'num_questions'     => $num_questions,
+                            'quiz_type'         => $quiz_type,
+                            'score'             => $score
+                        ));
+                    }
+
+                    // Display quiz finish summary
+                    return View::make('quizz.quizz-finished', array(
+                                                'questions' => Session::get('questions'),
+                                                'questions_idx' => Session::get('questions_idx'),
+                                                'number_of_questions' => Session::get('number_of_questions'),
+                                                'q_index' => Session::get('q_index'),
+                                                'feedback' => Session::get('feedback'),
+                                                'answered_questions' => Session::get('answered_questions'),
+                                                'correct_answers' => Session::get('correct_answers')
+                                                )); 
+
+            // if quiz is still active, display the feedback page with next question button
+            } else { 
+
+                    // generate Flickr photographs for the feedback page
+                    $flickering = App::make('flickering');
+                    $flickering->handshake('ade52786b574ca2ddbf8b58a0ce7299b', '25654303463a1f1e');
+                    $search_query = $question . " " . $capital;
+
+                    $results = Flickering::callMethod('photos.search', array(
+                                                                            'text' => $search_query,
+                                                                            'tags' => $capital, 
+                                                                            'extras' => 'url_m',
+                                                                            'orientation' => 'landscape', 
+                                                                            'sort' => 'relevance'
+                                                                            ));
+                    $photos = $results->getResults('photo');
+                    $photo_size = sizeof($photos);
+
+                    $question_idx = Session::get('questions_idx');
+                    $q_index = Session::get('q_index');
+                    $current_country = $question_idx[$q_index - 1][0];
+                    $country = Country::where('countryName', '=', $current_country)->get();
+
+                    // in case there is less than 10 photographs returned from Flickr
+                    if ($photo_size > 10) {
+                        $photo_index = 10;
+                    } else {
+                        $photo_index = $photo_size;
+                    }
+
+                    // put data in the session
+                    Session::put('photos', $photos);
+                    Session::put('photo_index', $photo_index);
+                    Session::put('country', $country);
+
+                    // render view         
+                    return View::make('quizz.quizz-feedback', array(
+                                                'country' => Session::get('country'),
+                                                'questions' => Session::get('questions'),
+                                                'questions_idx' => Session::get('questions_idx'),
+                                                'number_of_questions' => Session::get('number_of_questions'),
+                                                'capitals' => Session::get('capitals'), 
+                                                'all_capitals' => Session::get('all_capitals'), 
+                                                'randomizer' => Session::get('randomizer'),
+                                                'randomizer_250' => Session::get('randomizer_250'),
+                                                'q_index' => Session::get('q_index'),
+                                                'feedback' => Session::get('feedback'),
+                                                'photos' => Session::get('photos'),
+                                                'photo_index' => Session::get('photo_index'),
+                                                'title' => Session::get('number_of_questions') . ' Questions Quizz | '
+                                                )); 
+           
+            }
         }
     }
 

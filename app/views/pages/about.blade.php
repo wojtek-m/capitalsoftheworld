@@ -17,7 +17,7 @@
                     <a href="https://www.edx.org/course/introduction-computer-science-harvardx-cs50x">edX</a>. It was built in <a href="http://php.net/">PHP</a> using <a href="http://laravel.com/">Laravel</a> 
                     framework and Twitter <a href="http://getbootstrap.com/">Bootstrap</a> with a help of some awesome tools 
                     including <a href="https://www.vagrantup.com/">Vagrant VMware</a>, <a href="http://www.sublimetext.com/">Sublime Text</a> 
-                    and <a href="http://bliker.github.io/cmder/">Cmder</a>. The website uses <a href="https://www.flickr.com/">Flickr</a> API to display images.</p>
+                    and <a href="http://bliker.github.io/cmder/">Cmder</a>. The website uses data from <a href="http://dbpedia.org/About">DBpedia</a> and <a href="https://www.flickr.com/">Flickr</a> API to display images.</p>
                     <p>Background Image by <a href="https://www.flickr.com/photos/angeloangelo/7302477402/">Angelo DeSantis</a></p>
                     <p>Web developement by Wojtek Murawski</p>
                 </div>

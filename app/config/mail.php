@@ -28,7 +28,7 @@ return array(
 	|
 	*/
 
-	'host' => 'ns1.qwhup.net',
+	'host' => 'smtp.mailgun.org',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -41,7 +41,7 @@ return array(
 	|
 	*/
 
-	'port' => 465,
+	'port' => 587,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -54,7 +54,7 @@ return array(
 	|
 	*/
 
-	'from' => array('address' => 'dev@wojtekmurawski.me', 'name' => 'QuizzGeo'),
+	'from' => array('address' => 'postmaster@capitalsoftheworld.eu', 'name' => 'Capitals of the World'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -67,7 +67,7 @@ return array(
 	|
 	*/
 
-	'encryption' => 'ssl',
+	'encryption' => 'tls',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -80,7 +80,7 @@ return array(
 	|
 	*/
 
-	'username' => 'dev@wojtekmurawski.me',
+	'username' => 'postmaster@capitalsoftheworld.eu',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -93,7 +93,7 @@ return array(
 	|
 	*/
 
-	'password' => 'DTscSolfzhesdvCtQABc',
+	'password' => '08ab8a54062e8302f876c9329ff04270',
 
 	/*
 	|--------------------------------------------------------------------------
