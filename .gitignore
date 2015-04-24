@@ -1,6 +1,6 @@
 /app/config/*
 /app/storage/*
-/backup/*
+/_backup/*
 /bootstrap/compiled.php
 /vendor/*
 /sqldump/*

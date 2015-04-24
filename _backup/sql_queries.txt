@@ -1,6 +1,0 @@
-UPDATE
-    countries CO, countries_dbpedia DB
-SET
-    CO.description = DB.description
-WHERE
-    CO.countryName = DB.country_name
