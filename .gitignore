@@ -1,7 +1,9 @@
+/app/config/*
+/app/storage/*
 /bootstrap/compiled.php
-/vendor
-/sqldump
-/_other_addons
+/vendor/*
+/sqldump/*
+/_other_addons/*
 composer.phar
 composer.lock
 .env.*.php
@@ -11,4 +13,4 @@ Thumbs.db
 database.php
 mail.php
 
-/app/**/config/
+/app/**/config/*
